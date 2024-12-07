@@ -34,5 +34,29 @@ export const getmessage = async (req, res) => {
 }
 
 export const sendMessage = async (req, res) => {
-    try
+    try {
+        const { text , image } = req.body;
+        const {receiverId} = req.params;
+        const senderId = req.user._id;
+
+        let imageUrl
+        if(image){
+            const uploadImage = await cloudinary.uploader.upload(image);
+            imageUrl : uploadImage.secure_url;
+        }
+
+        const newMessage = new Message({
+            senderId,
+            receiverId,
+            text,
+            image : imageUrl,
+        });
+
+        await newMessage.save();
+
+        res.status(200).json({message : "The message is sent successfully"})
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({message : "Internal Server error"})
+    }
 }
