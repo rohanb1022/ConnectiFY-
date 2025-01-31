@@ -17,13 +17,14 @@ export const useAuthStore = create((set , get) => ({
     isSigningUp : false,
     isLoggingIn : false,
     isUpdatingProfile : false,
-    isCheckingAuth : true,
+    isCheckingAuth : false,
     onlineUsers : [],
     socket : null,
     
 
 
     checkAuth : async () => {
+        set({isCheckingAuth : true});
         try {
             const res = await axiosInstance.get("/auth/check");  
             // this is the api call to backend (api is basically use to connect the backend and frontend) now this request will fetch the data from the backend from /auth/check this end url the baseUrl we already provided while creating the axiosInstance 
